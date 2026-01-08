@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我的相册 - 小艾的个人网站</title>
+    <link rel="stylesheet" href="相册.CSS" />
+    <link rel="stylesheet icon" href="img/图标.png" />
+  </head>
+  <body>
+    <!-- 导航栏 -->
+    <div class="nav">
+      <div class="logo">
+        <span class="logo">小艾</span>
+      </div>
+      <div class="content">
+        <a href="index.html">首页</a>
+        <a href="我的爱好.html">我的爱好</a>
+        <a href="相册.html" class="active">我的相册</a>
+        <a href="联系我.html">联系我</a>
+      </div>
+    </div>
+    <div class="header">
+      <h1>我的相册</h1>
+      <p>用镜头记录生活的美好时光</p>
+    </div>
+
+    <div class="tabs-container">
+      <button class="tab-btn active" data-tab="all">
+        <i class="fas fa-images"></i> 全部
+      </button>
+      <button class="tab-btn" data-tab="daily">
+        <i class="fas fa-home"></i> 日常生活
+      </button>
+      <button class="tab-btn" data-tab="travel">
+        <i class="fas fa-plane"></i> 旅行足迹
+      </button>
+      <button class="tab-btn" data-tab="food">
+        <i class="fas fa-utensils"></i> 美食记录
+      </button>
+    </div>
+
+    <div class="photo-grid" id="photoGrid">
+      <!-- 图片卡片将通过JavaScript动态生成 -->
+    </div>
+
+    <div class="empty-message" id="emptyMessage">
+      <i class="fas fa-camera"></i>
+      <p>当前分类下暂无照片，快去添加一些吧！</p>
+    </div>
+
+    <div class="notification" id="notification">
+      <i class="fas fa-check-circle"></i>
+      <span>屏幕截图已复制到剪贴板</span>
+    </div>
+
+    <script>
+      // 相册数据
+      const photos = [
+        {
+          id: 1,
+          title: "高中的训练时光",
+          description: "美好的校园生活",
+          tag: "daily",
+          image: "img/全部/高中训练.jpg",
+        },
+        {
+          id: 2,
+          title: "校园时光",
+          description: "Terra校园时光",
+          tag: "daily",
+          image: "img/全部/高中时光.jpg",
+        },
+        {
+          id: 3,
+          title: "🎃🥔❤",
+          description: "二十中最好的三大坨",
+          tag: "friends",
+          image: "img/全部/三大坨.jpg",
+        },
+        {
+          id: 4,
+          title: "董眼镜打卡",
+          description: "打卡董眼镜ψ(｀∇´)ψ",
+          tag: "food",
+          image: "img/全部/火锅.jpg",
+        },
+        {
+          id: 5,
+          title: "水果提拉米苏",
+          description: "我最爱的水果提拉米苏青提味(·√·√)",
+          tag: "food",
+          image: "img/全部/提拉米苏.jpg",
+        },
+        {
+          id: 6,
+          title: "成都太古里",
+          description: "去成都太古里啦！打卡熊猫(^▽^*)",
+          tag: "travel",
+          image: "img/全部/熊猫.jpg",
+        },
+        {
+          id: 7,
+          title: "家庭聚会",
+          description: "新年快乐家庭聚会",
+          tag: "friends",
+          image: "img/全部/家庭聚会.jpg",
+        },
+        {
+          id: 8,
+          title: "和室友的快乐时光",
+          description: "美美桑内和室友的快乐时光",
+          tag: "friends",
+          image: "img/全部/寝室.jpg",
+        },
+        {
+          id: 9,
+          title: "和🐙的时光",
+          description: "每次跟她在一起都有拍不完的照片",
+          tag: "friends",
+          image: "img/全部/zwq.jpg",
+        },
+        {
+          id: 10,
+          title: "和🐖的最美时光",
+          description: "和🐖开启我们的第八年啦!",
+          tag: "friends",
+          image: "img/全部/猪猪.jpg",
+        },
+        {
+          id: 11,
+          title: "自然风光",
+          description: "山间的清新空气自然风光",
+          tag: "travel",
+          image: "img/全部/山景.jpg",
+        },
+        {
+          id: 12,
+          title: "2026年第一个惊喜!",
+          description: "一发入魂 鸿运当头",
+          tag: "friends",
+          image: "img/全部/和平.jpg",
+        },
+      ];
+
+      // 标签对应关系
+      const tagLabels = {
+        all: "全部",
+        daily: "日常生活",
+        travel: "旅行足迹",
+        food: "美食记录",
+        friends: "朋友聚会",
+      };
+
+      // DOM元素
+      const photoGrid = document.getElementById("photoGrid");
+      const tabButtons = document.querySelectorAll(".tab-btn");
+      const emptyMessage = document.getElementById("emptyMessage");
+      const notification = document.getElementById("notification");
+
+      // 初始化显示所有照片
+      function initGallery() {
+        renderPhotos("all");
+
+        // 绑定标签页点击事件
+        tabButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            // 移除所有按钮的active类
+            tabButtons.forEach((btn) => btn.classList.remove("active"));
+            // 给当前点击的按钮添加active类
+            this.classList.add("active");
+            // 获取标签类型
+            const tabType = this.getAttribute("data-tab");
+            // 渲染对应标签的照片
+            renderPhotos(tabType);
+
+            // 模拟截图提示（每3次切换显示一次）
+            if (Math.random() > 0.7) {
+              showNotification();
+            }
+          });
+        });
+
+        // 初始隐藏通知
+        notification.style.display = "none";
+      }
+
+      // 渲染照片
+      function renderPhotos(tabType) {
+        // 清空当前网格
+        photoGrid.innerHTML = "";
+
+        // 根据标签筛选照片
+        let filteredPhotos;
+        if (tabType === "all") {
+          filteredPhotos = photos;
+        } else {
+          filteredPhotos = photos.filter((photo) => photo.tag === tabType);
+        }
+
+        // 如果没有照片，显示空状态消息
+        if (filteredPhotos.length === 0) {
+          emptyMessage.classList.add("show");
+          return;
+        } else {
+          emptyMessage.classList.remove("show");
+        }
+
+        // 创建照片卡片
+        filteredPhotos.forEach((photo) => {
+          const card = document.createElement("div");
+          card.className = "photo-card";
+          card.style.animationDelay = `${Math.random() * 0.3}s`;
+
+          card.innerHTML = `
+                    <img src="${photo.image}" alt="${
+            photo.title
+          }" class="photo-img">
+                    <div class="photo-content">
+                        <h3 class="photo-title">${photo.title}</h3>
+                        <p class="photo-desc">${photo.description}</p>
+                        <span class="photo-tag">${tagLabels[photo.tag]}</span>
+                    </div>
+                `;
+
+          photoGrid.appendChild(card);
+        });
+      }
+
+      // 显示通知
+      function showNotification() {
+        notification.style.display = "flex";
+        notification.style.animation =
+          "slideInRight 0.5s ease, fadeOut 0.5s ease 2.5s forwards";
+
+        // 3秒后隐藏通知
+        setTimeout(() => {
+          notification.style.display = "none";
+        }, 3000);
+      }
+
+      // 页面加载完成后初始化相册
+      document.addEventListener("DOMContentLoaded", initGallery);
+    </script>
+
+    <!-- 页脚 -->
+    <footer>© 2025 小艾的个人网站 感谢您的访问</footer>
+  </body>
+</html>
