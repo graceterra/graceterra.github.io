@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联系我 - 小艾的个人网站</title>
+    <link rel="stylesheet" href="联系我.CSS">
+    <link rel="stylesheet icon" href="img/图标.png">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <div class="nav">
+      <div class="logo">
+        <span class="logo">小艾</span>
+      </div>
+      <div class="content">
+        <a href="index.html">首页</a>
+        <a href="我的爱好.html">我的爱好</a>
+        <a href="相册.html" >我的相册</a>
+        <a href="联系我.html" class="active">联系我</a>
+      </div>
+    </div>
+
+    <!-- 主内容 -->
+    <main class="main">
+        <!-- 联系方式 -->
+        <div class="card">
+            <h3>联系方式</h3>
+            <div class="contact-info">
+                <div class="info-item">
+                    <img src="https://img.icons8.com/fluency/48/000000/email.png" alt="邮箱">
+                    <span>xiaoai@example.com</span>
+                </div>
+                <div class="info-item">
+                    <img src="img/微信.png" alt="微信">
+                    <span>xiaoai_2025</span>
+                </div>
+                <div class="info-item">
+                    <img src="img/qq.png" alt="QQ">
+                    <span>123456789</span>
+                </div>
+                <div class="info-item">
+                    <img src="https://img.icons8.com/fluency/48/000000/map-marker.png" alt="地址">
+                    <span>XX市XX区</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 发送消息表单 -->
+        <div class="card">
+            <h3>发送消息</h3>
+            <form onsubmit="handleSend(event)">
+                <div class="form-group">
+                    <label for="name">姓名</label>
+                    <input type="text" id="name" placeholder="请输入您的姓名" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">邮箱</label>
+                    <input type="email" id="email" placeholder="请输入您的邮箱" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">主题</label>
+                    <select id="subject" required>
+                        <option value="">请选择主题</option>
+                        <option value="交流学习">交流学习</option>
+                        <option value="照片分享">照片分享</option>
+                        <option value="学习方法">学习方法</option>
+                        <option value="书籍推荐">书籍推荐</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">消息内容</label>
+                    <textarea id="message" placeholder="请输入您想说的话..." required></textarea>
+                </div>
+                <button type="submit" class="send-btn">发送消息</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- 常见问题 -->
+    <section class="faq">
+        <h3>常见问题</h3>
+        <div class="faq-list">
+            <div class="faq-item">
+                <q>可以一起学习交流吗？</q>
+                <p>当然可以！我很乐意和志同道合的朋友一起学习进步，互相鼓励。</p>
+            </div>
+            <div class="faq-item">
+                <q>你的照片可以分享吗？</q>
+                <p>个人使用没问题，如果是其他用途请先联系我获得同意哦。</p>
+            </div>
+            <div class="faq-item">
+                <q>有什么好的学习方法推荐？</q>
+                <p>我觉得最重要的是保持好奇心和耐心，多实践多总结，欢迎一起讨论。</p>
+            </div>
+            <div class="faq-item">
+                <q>可以推荐一些好书吗？</q>
+                <p>当然！我很乐意分享我喜欢的书籍，我们可以一起读书交流心得。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        ©2025 小艾的个人网站,感谢您的访问
+    </footer>
+
+    <script>
+        function handleSend(event) {
+            event.preventDefault(); // 阻止表单默认提交
+            alert('消息发送成功！我会尽快回复您~');
+            document.querySelector('form').reset(); // 重置表单
+        }
+    </script>
+</body>
+</html>
